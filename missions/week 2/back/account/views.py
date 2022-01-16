@@ -2,7 +2,7 @@ import secrets
 
 import requests
 from django.contrib import messages
-
+from django.contrib.auth import login as auth_login
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -189,6 +189,8 @@ def oauth(request):
     except User.DoesNotExist:
         user = User.objects.create_user(username=user_nickname, email=user_email)
         user.save()
+
+    auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     return redirect('base')
 
